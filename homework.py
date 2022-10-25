@@ -73,7 +73,7 @@ def parse_status(homework):
             f'Недокументированный статус домашки: {homework_status}'
         )
     return (
-        f'Статус проверки работы "{homework_name}". {verdict}'
+        f'Изменился статус проверки работы "{homework_name}". {verdict}'
     )
 
 
