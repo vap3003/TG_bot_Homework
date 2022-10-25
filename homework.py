@@ -89,7 +89,7 @@ def main():
     """Основная логика работы бота."""
     if check_tokens():
         bot = telegram.Bot(token=TELEGRAM_TOKEN)
-        current_timestamp = int(time.time())
+        current_timestamp = 1
         message_already_sent = False
     else:
         logger.critical('Отсутствие обязательных переменных окружения!')
