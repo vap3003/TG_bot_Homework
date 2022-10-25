@@ -70,12 +70,10 @@ def parse_status(homework):
         verdict = HOMEWORK_STATUSES[homework_status]
     except ValueError:
         logger.error(
-            f'Недокументированный статус домашней'
-            + f' работы: {homework_status}'
+            f'Недокументированный статус домашки: {homework_status}'
         )
     return (
-        f'Изменился статус проверки работы '
-        + f'"{homework_name}". {verdict}'
+        f'Статус проверки работы "{homework_name}". {verdict}'
     )
 
 
