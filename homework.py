@@ -35,8 +35,7 @@ logger.addHandler(stream_handler)
 
 
 def send_message(bot, message):
-    """Отправка сообщения в Телеграм чат"""
-
+    """Отправка сообщения в Телеграм чат."""
     try:
         bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
     except Exception:
@@ -45,8 +44,7 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
-    """Получен ответа от API Практикума"""
-
+    """Получен ответа от API Практикума."""
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
     homework_statuses = requests.get(ENDPOINT, headers=HEADERS, params=params)
@@ -57,8 +55,7 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
-    """Проверка ответа от API практикума"""
-
+    """Проверка ответа от API практикума."""
     if type(response['homeworks']) == list:
         return response['homeworks']
     else:
@@ -66,8 +63,7 @@ def check_response(response):
 
 
 def parse_status(homework):
-    """Определение статуса проверки работы"""
-
+    """Определение статуса проверки работы."""
     homework_name = homework['homework_name']
     homework_status = homework['status']
     try:
@@ -81,8 +77,7 @@ def parse_status(homework):
 
 
 def check_tokens():
-    """Проверк наличия переменных окружения"""
-
+    """Проверк наличия переменных окружения."""
     if PRACTICUM_TOKEN and TELEGRAM_CHAT_ID and TELEGRAM_TOKEN:
         return True
     else:
@@ -91,7 +86,6 @@ def check_tokens():
 
 def main():
     """Основная логика работы бота."""
-
     if check_tokens():
         bot = telegram.Bot(token=TELEGRAM_TOKEN)
         current_timestamp = int(time.time())
