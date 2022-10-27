@@ -57,21 +57,21 @@ def get_api_answer(current_timestamp):
             headers=HEADERS,
             params=params
         )
-    except Exception:
-        logger.error('Сбой при отправке запроса к API')
+    except ConnectionError:
+        raise ConnectionError
     if homework_statuses.status_code != HTTPStatus.OK:
-        raise Exception('Сбой при запросе к эндпоинту')
+        raise ConnectionError('Сбой при запросе к эндпоинту')
     return homework_statuses.json()
 
 
 def check_response(response):
     """Проверка ответа от API практикума."""
-    if not (type(response) is dict):
+    if not isinstance(response, dict):
         raise TypeError('Ответ от API имеет некорректный тип')
     if not('homeworks' in response and 'current_date' in response):
         raise ValueError('Отсутствуют подходящие ключи в ответе от API')
     homeworks = response.get('homeworks')
-    if not(type(homeworks) is list):
+    if not isinstance(homeworks, list):
         raise TypeError('Домашки приходят не в виде списка в ответ от API')
     return homeworks
 
@@ -80,19 +80,16 @@ def parse_status(homework):
     """Определение статуса проверки работы."""
     homework_name = homework.get('homework_name')
     homework_status = homework.get('status')
-    print('homework_name' not in homework)
     if 'status' not in homework:
+        raise ValueError('Отсутствует ключ status')
+    if not HOMEWORK_STATUSES[homework_status]:
         raise ValueError('Отсутствует ключ homework_status')
-    if 'homework_name' in homework:
-        verdict = HOMEWORK_STATUSES[homework_status]
-        return (
-            f'Изменился статус проверки работы "{homework_name}". {verdict}'
-        )
-    else:
-        verdict = HOMEWORK_STATUSES[homework_status]
-        return (
-            f'Изменился статус проверки работы. {verdict}'
-        )
+    verdict = HOMEWORK_STATUSES[homework_status]
+    if 'homework_name' not in homework:
+        raise ValueError('Отсутствует ключ homework_name')
+    return (
+        f'Изменился статус проверки работы "{homework_name}". {verdict}'
+    )
 
 
 def check_tokens():
